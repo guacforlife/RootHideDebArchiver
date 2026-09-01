@@ -32,10 +32,13 @@
 #define REPO_PORT 8140
 
 // Optional Gotify push, off unless you configure it. Create
-// /var/jb/etc/rhdarchived.plist with GotifyURL and GotifyToken to get a banner
+// <jbroot>/etc/rhdarchived.plist with GotifyURL and GotifyToken to get a banner
 // when new debs are archived; without it the daemon simply does not notify.
 // Deliberately NOT compiled in — a push token does not belong in source.
-#define CONFIG_FILE @"/var/jb/etc/rhdarchived.plist"
+// Jbroot-relative, resolved like SourceDir(): this runs in the REAL namespace
+// where /var/jb does not resolve, so a literal /var/jb path would silently
+// never be found.
+#define CONFIG_REL @"etc/rhdarchived.plist"
 
 static void RHDLog(NSString *fmt, ...) {
     va_list args; va_start(args, fmt);
@@ -111,7 +114,9 @@ static NSDictionary *RHDConfig(void) {
     static NSDictionary *cfg = nil;
     static dispatch_once_t once;
     dispatch_once(&once, ^{
-        cfg = [NSDictionary dictionaryWithContentsOfFile:CONFIG_FILE] ?: @{};
+        NSString *jb = JBRoot();
+        NSString *path = jb ? [jb stringByAppendingPathComponent:CONFIG_REL] : nil;
+        cfg = (path ? [NSDictionary dictionaryWithContentsOfFile:path] : nil) ?: @{};
     });
     return cfg;
 }
