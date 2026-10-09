@@ -4,7 +4,8 @@
 // Deliberately self-contained: the device has no dpkg-scanpackages (no perl),
 // no python3 and no HTTP server, so the index is built from `dpkg-deb -f` plus
 // an in-process SHA256, and the server is ~150 lines of BSD sockets. The only
-// external binaries used are dpkg-deb and gzip, both already on device.
+// external binaries used are dpkg-deb (part of dpkg) and gzip, which a fresh
+// roothide bootstrap does not have, so control declares Depends: gzip.
 
 #import "repo.h"
 #include <CommonCrypto/CommonDigest.h>

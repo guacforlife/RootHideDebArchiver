@@ -1,8 +1,9 @@
 Package: com.guacforlife.roothidedebarchiver
 Name: RootHideDebArchiver
-Version: 1.1.4
+Version: 1.1.5
 Architecture: iphoneos-arm64
 Description: Watches the RootHide Patcher deb cache, mirrors new packages into iCloud Drive, and publishes the cache as a local Sileo repo on 127.0.0.1:8140.
 Maintainer: guacforlife
 Author: guacforlife
 Section: System
+Depends: gzip
